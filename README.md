@@ -3,7 +3,7 @@ Scripts and explanations for kinome analysis in "Substrate mechanics modulate pe
 
 
 
-~This study requires 'Raw data' (QCLog_CmbCor) and Upstream Kinases Algoritm output files from PamDx.~
+/This study requires 'Raw data' (QCLog_CmbCor) and Upstream Kinases Algoritm output files from PamDx./
 
 ## PCA
 
