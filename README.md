@@ -22,7 +22,7 @@ Cells convert physical cues into biochemical signals via mechanosensitive pathwa
 
 This script performs the following steps:
 
-1. **Data loading & merging** — Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥90% of samples.
+1. **Data loading & merging** — Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥70% of samples.
 2. **Heatmap** — Generates a z-score-scaled hierarchical clustering heatmap using `ComplexHeatmap`, annotated by substrate mechanics, genotype, and run ID.
 3. **PCA** — Performs principal component analysis on the phosphopeptide matrix (missing values imputed with column means). Produces plots for:
    - Overall genotype separation (PC1 vs PC2)
