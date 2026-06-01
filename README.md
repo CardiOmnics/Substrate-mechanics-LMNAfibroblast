@@ -46,26 +46,26 @@ This script performs the following steps:
 ### `pPs_analysis_script.R`
 
 ```r
-library(readxl)         # Reading .xls input files
-library(dplyr)          # Data wrangling
-library(tidyr)          # pivot_longer(), unite()
-library(tibble)         # column_to_rownames(), rownames_to_column()
-library(purrr)          # reduce() for merging data list
-library(ggplot2)        # Plotting
-library(ggpubr)         # stat_compare_means(), compare_means()
-library(ComplexHeatmap) # Heatmap generation
-library(circlize)       # colorRamp2() for heatmap color scale
-library(patchwork)      # Combining ggplot panels with | and /
+library(readxl)        
+library(dplyr)          
+library(tidyr)         
+library(tibble)         
+library(purrr)          
+library(ggplot2)        
+library(ggpubr)         
+library(ComplexHeatmap) 
+library(circlize)       
+library(patchwork)      
 ```
 
 ### `UKA_heatmap_scripts.R`
 
 ```r
-library(dplyr)    # Data wrangling
-library(pheatmap) # Heatmap generation
-library(readxl)   # Loaded but data read via readr
-library(ggplot2)  # Loaded for potential downstream plotting
-library(readr)    # read_csv() for UKA output files
+library(dplyr)    
+library(pheatmap) 
+library(readxl)   
+library(ggplot2)  
+library(readr)    
 ```
 
 ---
