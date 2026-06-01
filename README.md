@@ -72,7 +72,7 @@ library(readr)
 
 ## Input Data
 
-Raw data files are not included in this repository. The scripts expect the following files (update paths in the scripts to match your local directory structure):
+The scripts expect the following files (update paths in the scripts to match your local directory):
 
 **`pPs_analysis_script.R`**
 - `Raw data_Run1-2_Updated.xls`
@@ -92,8 +92,8 @@ Raw data files are not included in this repository. The scripts expect the follo
 
 | Label | Description |
 |---|---|
-| `hfLMNA_WT` | Control human fibroblasts (wild-type *LMNA*) |
-| `hfLMNA_R377L` | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) |
-| Rigid-unstrained | Conventional rigid substrate (plastic/glass), no mechanical stimulation |
-| Soft-unstrained | Soft hydrogel substrate, no mechanical stimulation |
-| Soft-strained | Soft hydrogel substrate with cyclic stretch applied (2.5D) |
+| hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) |
+| hfLMNA_R377L | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) |
+| Rigid-unstrained | Conventional rigid substrate (plastic), no mechanical stimulation |
+| Soft-unstrained | Soft substrate, no mechanical stimulation |
+| Soft-strained | Soft substrate with cyclic stretch applied (2.5D) |
