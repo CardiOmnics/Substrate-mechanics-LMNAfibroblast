@@ -90,10 +90,10 @@ The scripts expect the following files (update paths in the scripts to match you
 
 ## Experimental Groups
 
-| Label | Description |
-|---|---|
-| hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) |
-| hfLMNA_R377L | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) |
-| Rigid-unstrained | Conventional rigid substrate (plastic), no mechanical stimulation |
-| Soft-unstrained | Soft substrate, no mechanical stimulation |
-| Soft-strained | Soft substrate with cyclic stretch applied (2.5D) |
+| Label | Description | Name in raw-date |
+|---|---|---|
+| hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) | WT | 
+| hfLMNA_R377L | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) | LMNA |
+| Rigid-unstrained | Conventional rigid substrate (plastic), no mechanical stimulation | Hard |
+| Soft-unstrained | Soft substrate, no mechanical stimulation | Soft |
+| Soft-strained | Soft substrate with cyclic stretch applied (2.5D) | Stretch |
