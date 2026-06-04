@@ -90,7 +90,7 @@ The scripts expect the following files (update paths in the scripts to match you
 
 ## Experimental Groups
 
-| Label | Description | Name in raw-date |
+| Label | Description | Name in raw-data |
 |---|---|---|
 | hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) | WT | 
 | hfLMNA_R377L | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) | LMNA |
