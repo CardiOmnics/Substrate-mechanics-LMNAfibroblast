@@ -90,6 +90,8 @@ The scripts expect the following files (update paths in the scripts to match you
 
 ## Experimental Groups
 
+The labels are simplified/shortened in the raw-data files to improve simplicity. Please use this table as guideline through the experimental groups.
+
 | Label | Description | Name in raw-data |
 |---|---|---|
 | hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) | WT | 
