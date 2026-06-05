@@ -1,11 +1,13 @@
 # Input files required for `pPs_analysis_script.R`
 
 ## Explanation
+```r
 library(dplyr)    
 library(pheatmap) 
 library(readxl)   
 library(ggplot2)  
-library(readr)   
+library(readr)
+```   
 
 ## Metadata notes
 | Label | Description | Name in raw-data |
