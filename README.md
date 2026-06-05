@@ -37,7 +37,7 @@ This script performs the following steps:
 This script performs the following steps:
 
 1. **Substrate mechanics comparison** — Loads UKA output CSVs comparing Hard vs Soft and Stretch vs Soft conditions, filters by contrast group, and generates a heatmap of mean kinase statistic scores (thresholded by median final score < 1.3) across substrate mechanics conditions for both genotypes.
-2. **Genotype comparison** — Loads UKA output CSVs comparing hfLMNA<sup>R377L</sup> vs hfLMNA<sup>WT</sup> per substrate condition (Rigid-unstrained, Soft-unstrained, Soft-strained) and generates a corresponding kinase activity heatmap.
+2. **Genotype comparison** — Loads UKA output CSVs comparing hfLMNA<sup>R377L/WT</sup> vs hfLMNA<sup>WT/WT</sup> per substrate condition (Rigid-unstrained, Soft-unstrained, Soft-strained) and generates a corresponding kinase activity heatmap.
 
 ---
 
@@ -94,8 +94,8 @@ The labels are simplified/shortened in the raw-data files to improve simplicity.
 
 | Label | Description | Name in raw-data |
 |---|---|---|
-| hfLMNA_WT | Control human fibroblasts (wild-type *LMNA*) | WT | 
-| hfLMNA_R377L | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) | LMNA |
+| hfLMNA<sup>WT/WT</sup> | Control human fibroblasts (wild-type *LMNA*) | WT | 
+| hfLMNA<sup>R377L/WT</sup> | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) | LMNA |
 | Rigid-unstrained | Conventional rigid substrate (plastic), no mechanical stimulation | Hard |
 | Soft-unstrained | Soft substrate, no mechanical stimulation | Soft |
 | Soft-strained | Soft substrate with cyclic stretch applied (2.5D) | Stretch |
