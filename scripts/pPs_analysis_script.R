@@ -10,11 +10,11 @@ library(ComplexHeatmap)
 library(circlize) 
 library(patchwork)
 
-# Load data
-Raw_1_2 <- read_excel("C:/Users/Tim/Nextcloud/Veltrop_group/04_Kinome_analysis/01_Substrates/01_Raw_data/Raw data_Run1-2_Updated.xls", skip = 4)
-Raw_3_4 <- read_excel("C:/Users/Tim/Nextcloud/Veltrop_group/04_Kinome_analysis/01_Substrates/01_Raw_data/Raw data_Run3-4_Updated.xls", skip = 4)
-Raw_5_6_LMNA <- read_excel("C:/Users/Tim/Nextcloud/Veltrop_group/04_Kinome_analysis/01_Substrates/01_Raw_data/Raw data_Run5-6_LMNA_Updated.xls", skip = 4)
-Raw_5_6_WT <- read_excel("C:/Users/Tim/Nextcloud/Veltrop_group/04_Kinome_analysis/01_Substrates/01_Raw_data/Raw data_Run5-6_WT_Updated.xls", skip = 4)
+# Load data ### ADJUST PATH ###
+Raw_1_2 <- read_excel("YOUR/LOCAL/PATH/Raw data_Run1-2_Updated.xls", skip = 4)
+Raw_3_4 <- read_excel("YOUR/LOCAL/PATH/Raw data_Run3-4_Updated.xls", skip = 4)
+Raw_5_6_LMNA <- read_excel("YOUR/LOCAL/PATH/Raw data_Run5-6_LMNA_Updated.xls", skip = 4)
+Raw_5_6_WT <- read_excel("YOUR/LOCAL/PATH/Raw data_Run5-6_WT_Updated.xls", skip = 4)
 
 Raw_1_2 <- Raw_1_2 %>%
   rename_with(~ paste0(., "_RUN1_2"), -c(`Description`, `ID`, `Sequence`, `...4`))
