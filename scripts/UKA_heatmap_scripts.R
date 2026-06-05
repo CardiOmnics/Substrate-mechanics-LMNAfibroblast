@@ -7,9 +7,9 @@ library(readxl)
 library(ggplot2)
 library(readr)
 
-# Load data
-Hard_vs_soft <- read_csv("C:/Users/tim/Nextcloud/Veltrop_group/52_Tim/01_kinome/00_SORT!!/FW_ Exported Tercen UKA data/1_UKA_Hard vs Soft Run1-2.csv")
-Stretch_vs_soft <- read_csv("C:/Users/tim/Nextcloud/Veltrop_group/52_Tim/01_kinome/00_SORT!!/FW_ Exported Tercen UKA data/3_UKA_Stretch vs Soft Run3-4.csv")
+# Load data ### ADJUST PATH ###
+Hard_vs_soft <- read_csv("YOUR/LOCAL/PATH/1_UKA_Hard vs Soft Run1-2.csv")
+Stretch_vs_soft <- read_csv("YOUR/LOCAL/PATH/3_UKA_Stretch vs Soft Run3-4.csv")
 
 WT_hard_vs_soft <- Hard_vs_soft[grepl("C_WT_Hard vs C_Soft", Hard_vs_soft$UKA_app.UKA.Sgroup_contrast),]
 LMNA_hard_vs_soft <- Hard_vs_soft[grepl("LMNA_Hard vs C_Soft", Hard_vs_soft$UKA_app.UKA.Sgroup_contrast),]
@@ -96,8 +96,8 @@ pheatmap(
 )
 
 # UKA Genotype comparison Heatmap
-HardSoft_LMNAvsWT <- read_csv("C:/Users/tim/Nextcloud/Veltrop_group/52_Tim/01_kinome/00_SORT!!/FW_ Exported Tercen UKA data/2_UKA_ LMNA vs WT run1-2.csv")
-StretchSoft_LMNAvsWT <- read_csv("C:/Users/tim/Nextcloud/Veltrop_group/52_Tim/01_kinome/00_SORT!!/FW_ Exported Tercen UKA data/4_UKA_LMNA vs WT run3-4.csv")
+HardSoft_LMNAvsWT <- read_csv("YOUR/LOCAL/PATH/2_UKA_ LMNA vs WT run1-2.csv")
+StretchSoft_LMNAvsWT <- read_csv("YOUR/LOCAL/PATH/4_UKA_LMNA vs WT run3-4.csv")
 
 Hard_LMNAvsWT <- HardSoft_LMNAvsWT[grepl("Hard_LMNA vs C_WT", HardSoft_LMNAvsWT$UKA_app0.UKA0.Sgroup_contrast),]
 Soft_LMNAvsWT <- HardSoft_LMNAvsWT[grepl("C_Soft_LMNA vs C_WT", HardSoft_LMNAvsWT$UKA_app0.UKA0.Sgroup_contrast),]
