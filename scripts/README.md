@@ -4,17 +4,18 @@
 ### `pPs_analysis_script.R`
 
 ```r
-library(readxl)        
-library(dplyr)          
-library(tidyr)         
-library(tibble)         
-library(purrr)          
-library(ggplot2)        
-library(ggpubr)         
-library(ComplexHeatmap) 
-library(circlize)       
-library(patchwork)      
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(purrr)
+library(ggplot2)
+library(ggpubr)
+library(ComplexHeatmap)
+library(circlize)
+library(patchwork)
 ```
+Required raw data: [`Input/pPs_Raw_data/`](Input/pPs_Raw_data/)
 
 ### `UKA_heatmap_scripts.R`
 
