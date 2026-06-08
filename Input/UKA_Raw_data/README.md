@@ -1,7 +1,7 @@
 # Input required for `UKA_heatmap_scripts.R`
 
 
-## Explanation
+## Dependencies
 
 ```r
 library(dplyr)    
