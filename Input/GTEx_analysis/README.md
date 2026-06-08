@@ -8,16 +8,12 @@ The following publicly available datasets were used in the analyses and should b
 
 Source: https://gtexportal.org/home/downloads/adult-gtex/bulk_tissue_expression
 
-Required files:
-
 * `GTEx_Analysis_2026-05-19_v11_RNASeQCv2.4.3_gene_reads.gct.gz`
 * `GTEx_Analysis_v11_Annotations_SampleAttributesDS.txt`
 
 ### GTEx Single-Nucleus RNA-seq (snRNA-seq)
 
 Source: https://gtexportal.org/home/downloads/adult-gtex/bulk_tissue_expression
-
-Required file:
 
 * `GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad`
 
@@ -26,8 +22,6 @@ Required file:
 Dataset accession: GSE262112
 
 Source: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE262112
-
-Required samples:
 
 * `GSM8157769`
 * `GSM8157770`
