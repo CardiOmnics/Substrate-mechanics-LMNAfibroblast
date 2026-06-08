@@ -104,5 +104,5 @@ The labels are simplified/shortened in the raw-data files to improve simplicity.
 
 ## Credits
 
-The script PamDx_GTExanalysis.Rmd was written by @ and is included here with permission. 
+The script `PamDx_GTExanalysis.Rmd` was written by @ and is included here with permission. 
 
