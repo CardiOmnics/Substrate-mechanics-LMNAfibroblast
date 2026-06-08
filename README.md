@@ -101,7 +101,7 @@ The labels are simplified/shortened in the raw-data files to improve simplicity.
 | Soft-unstrained | Soft substrate, no mechanical stimulation | Soft |
 | Soft-strained | Soft substrate with cyclic stretch applied (2.5D) | Stretch |
 
-
+---
 ## Credits
 
 The script `PamDx_GTExanalysis.Rmd` was written by [Elibrouwer](https://github.com/elibrouwer) and is included here with permission. 
