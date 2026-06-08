@@ -28,7 +28,7 @@ library(readxl)
 library(ggplot2)  
 library(readr)    
 ```
-
+Required raw data files are located in the [`../Input/UKA_Raw_data/`](../Input/UKA_Raw_data/) directory.
 ### `PamDx_GTExanalysis.Rmd`
 ```r
 library(Seurat)
