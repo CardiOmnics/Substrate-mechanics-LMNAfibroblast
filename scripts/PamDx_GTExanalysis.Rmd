@@ -1,5 +1,5 @@
 ---
-title: "PamDx TIM — Expression Analysis"
+title: "PamDx — Expression Analysis"
 subtitle: "GTEx snRNA-seq + Cultured Fibroblast Heatmaps"
 author: "Brouw"
 date: "`r Sys.Date()`"
