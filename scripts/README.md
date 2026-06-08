@@ -15,7 +15,8 @@ library(ComplexHeatmap)
 library(circlize)
 library(patchwork)
 ```
-Required raw data: [`Input/pPs_Raw_data/`](Input/pPs_Raw_data/)
+Required raw data can be found in the [`Input/pPs_Raw_data/`](.../Input/pPs_Raw_data/) directory.
+
 
 ### `UKA_heatmap_scripts.R`
 
