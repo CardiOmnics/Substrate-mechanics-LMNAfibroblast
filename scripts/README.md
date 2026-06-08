@@ -46,3 +46,8 @@ library(gridExtra)
 ```
 
 ---
+
+
+## Credits
+
+The script `PamDx_GTExanalysis.Rmd` was written by [Elibrouwer](https://github.com/elibrouwer) and is included here with permission. 
