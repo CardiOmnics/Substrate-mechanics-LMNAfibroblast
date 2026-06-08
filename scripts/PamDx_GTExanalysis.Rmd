@@ -45,21 +45,21 @@ library(gridExtra)
 
 ## Configuration
 
-All file paths are defined here. Edit this block only.
+All file paths are defined here. Edit the paths suiting your local directories.
 
 ```{r config}
 PATHS <- list(
-  gtex_h5ad        = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad",
-  gtex_parsed_dir  = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_tissues_parsed",
-  gtex_metadata    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_metadata.csv",
-  gtex_genes       = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_genes.csv",
-  fibro_sample1    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/cultured_fibroblasts/GSM8157769_HFF-50-CTR1.csv",
-  fibro_sample2    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/cultured_fibroblasts/GSM8157770_HFF-50-CTR2.csv",
-  gtex_bulk_annot  =  "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/GTEx_Analysis_v11_Annotations_SampleAttributesDS.txt",
-  gtex_bulk_counts = "C:/Users/brouw/Downloads/GTEx_Analysis_2026-05-19_v11_RNASeQCv2.4.3_gene_reads.gct/GTEx_Analysis_2025-08-22_v11_RNASeQCv2.4.3_gene_reads_non_lcm.gct",
-  pamdx_lists_dir  = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDX_lists",
-  output_pdf_all   = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDx_heatmaps.pdf",
-  output_pdf_art   = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDx_heatmaps_article1.pdf"
+  gtex_h5ad        = "YOUR/LOCAL/PATH/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad",
+  gtex_parsed_dir  = "YOUR/LOCAL/PATH/Expression_data/snRNA_seq/GTEx_8_tissues_parsed",
+  gtex_metadata    = "YOUR/LOCAL/PATH/snRNA_seq/GTEx_8_metadata.csv",
+  gtex_genes       = "YOUR/LOCAL/PATH/GTEx_8_genes.csv",
+  fibro_sample1    = "YOUR/LOCAL/PATH/GSM8157769_HFF-50-CTR1.csv",
+  fibro_sample2    = "YOUR/LOCAL/PATH/GSM8157770_HFF-50-CTR2.csv",
+  gtex_bulk_annot  = "YOUR/LOCAL/PATH/GTEx_Analysis_v11_Annotations_SampleAttributesDS.txt",
+  gtex_bulk_counts = "YOUR/LOCAL/PATH/GTEx_Analysis_2025-08-22_v11_RNASeQCv2.4.3_gene_reads_non_lcm.gct",
+  pamdx_lists_dir  = "YOUR/LOCAL/PATH/PamDX_lists",
+  output_pdf_all   = "YOUR/LOCAL/PATH/PamDx_heatmaps.pdf",
+  output_pdf_art   = "YOUR/LOCAL/PATH/PamDx_heatmaps_article1.pdf"
 )
 ```
 
