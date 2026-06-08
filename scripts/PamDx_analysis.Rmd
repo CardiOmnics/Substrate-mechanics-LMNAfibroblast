@@ -1,0 +1,600 @@
+---
+title: "PamDx TIM — Expression Analysis"
+subtitle: "GTEx snRNA-seq + Cultured Fibroblast Heatmaps"
+author: "Brouw"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: flatly
+    code_folding: show
+    df_print: kable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  message = TRUE,
+  warning = FALSE,
+  fig.width  = 22,
+  fig.height = 8
+)
+```
+
+---
+
+## Libraries
+
+```{r libraries, message=FALSE}
+library(Seurat)
+library(BPCells)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(stringr)
+library(purrr)
+library(tibble)
+library(pheatmap)
+library(grid)
+library(data.table)
+library(gridExtra)
+```
+
+
+## Configuration
+
+All file paths are defined here. Edit this block only.
+
+```{r config}
+PATHS <- list(
+  gtex_h5ad        = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad",
+  gtex_parsed_dir  = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_tissues_parsed",
+  gtex_metadata    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_metadata.csv",
+  gtex_genes       = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/snRNA_seq/GTEx_8_genes.csv",
+  fibro_sample1    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/cultured_fibroblasts/GSM8157769_HFF-50-CTR1.csv",
+  fibro_sample2    = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/Expression_data/cultured_fibroblasts/GSM8157770_HFF-50-CTR2.csv",
+  gtex_bulk_annot  =  "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/GTEx_Analysis_v11_Annotations_SampleAttributesDS.txt",
+  gtex_bulk_counts = "C:/Users/brouw/Downloads/GTEx_Analysis_2026-05-19_v11_RNASeQCv2.4.3_gene_reads.gct/GTEx_Analysis_2025-08-22_v11_RNASeQCv2.4.3_gene_reads_non_lcm.gct",
+  pamdx_lists_dir  = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDX_lists",
+  output_pdf_all   = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDx_heatmaps.pdf",
+  output_pdf_art   = "C:/Users/brouw/OneDrive - Universiteit Utrecht/Master Bioinformatics/Minor internship/PamDx_TIM/Datasets/PamDx_heatmaps_article1.pdf"
+)
+```
+
+---
+
+## Helper function — log(TP10K + 1) normalisation
+
+All three expression datasets are normalised identically: counts are scaled to
+10,000 per cell/sample (transcripts per 10k), then log~10~-transformed after
+adding a pseudocount of 1.
+
+```{r helper-norm}
+log_tp10k_norm <- function(count_matrix) {
+  lib_sizes <- colSums(count_matrix)
+  tp10k     <- t(t(count_matrix) / lib_sizes) * 10000
+  log10(tp10k + 1)
+}
+```
+
+---
+
+## 1. Load GTEx snRNA-seq dataset
+
+```{r load-gtex-snrna}
+GTEX_metadata <- read.csv(PATHS$gtex_metadata)
+GTEX_genes    <- read.csv(PATHS$gtex_genes)
+
+# Uncomment to write the BPCells directory the first time:
+# parse.data <- open_matrix_anndata_hdf5(PATHS$gtex_h5ad)
+# write_matrix_dir(mat = parse.data, dir = PATHS$gtex_parsed_dir)
+
+GTEX_mat <- open_matrix_dir(dir = PATHS$gtex_parsed_dir)
+```
+
+---
+
+## 2. Load cultured fibroblast dataset (GSE samples)
+
+Two samples (HFF-50-CTR1 and HFF-50-CTR2) are joined on the gene-name column
+and normalised to log(TP10K + 1).
+
+```{r load-fibro-gse}
+fibroblast_sample1 <- read.csv(PATHS$fibro_sample1)
+fibroblast_sample2 <- read.csv(PATHS$fibro_sample2)
+
+# Explicit join key to avoid silent row duplication
+combined_fibroblast <- fibroblast_sample1 %>%
+  left_join(fibroblast_sample2, by = "X", keep = FALSE)
+
+rownames(combined_fibroblast) <- combined_fibroblast$X
+combined_fibroblast %<>%
+  dplyr::select(where(is.numeric))
+
+# Normalise: log(TP10K + 1)
+log10k_1 <- log_tp10k_norm(combined_fibroblast)
+```
+
+---
+
+## 3. Build GTEx Seurat object and subset cardiac + skin fibroblasts
+
+Cells are retained if they originate from heart tissue (all cell types) or
+skin tissue (fibroblasts only). Skin fibroblasts are tagged with a `_Skin`
+suffix to distinguish them from cardiac fibroblasts.
+
+```{r build-gtex-seurat}
+GTEX_object <- CreateSeuratObject(GTEX_mat, meta.data = GTEX_metadata)
+
+cardiac_cells <- GTEX_object@meta.data[
+  grepl("Heart", GTEX_object@meta.data$Tissue.Site.Detail, ignore.case = TRUE), ]
+
+skin_fibro_cells <- GTEX_object@meta.data[
+  grepl("skin", GTEX_object@meta.data$Tissue.Site.Detail, ignore.case = TRUE), ] %>%
+  filter(Broad.cell.type == "Fibroblast")
+
+subset_df <- rbind(cardiac_cells, skin_fibro_cells) %>%
+  distinct(X)
+
+GTEX_Seurat_subset <- subset(GTEX_object, cells = rownames(subset_df))
+GTEX_Seurat_subset@assays$RNA@layers[["counts"]] <-
+  as(GTEX_Seurat_subset@assays$RNA@layers[["counts"]], "dgCMatrix")
+
+# Tag skin fibroblasts distinctly
+GTEX_Seurat_subset@meta.data %<>%
+  mutate(Broad.cell.type = if_else(
+    str_starts(Tissue.Site.Detail, "Skin"),
+    str_c(Broad.cell.type, "_Skin"),
+    Broad.cell.type
+  ))
+```
+
+---
+
+## 4. Build cultured fibroblast Seurat object (GSE)
+
+Data is already log(TP10K + 1) normalised — no further normalisation applied.
+
+```{r build-fibro-seurat}
+fibroblast_seurat <- CreateSeuratObject(log10k_1)
+```
+
+---
+
+## 5. Load GTEx bulk RNA-seq cultured fibroblast samples
+
+Samples annotated as `Cells - Cultured fibroblasts` in the GTEx v11 sample
+attributes are extracted from the full gene read-count matrix and normalised
+to log(TP10K + 1).
+
+```{r load-gtex-bulk}
+meta_bulk     <- fread(PATHS$gtex_bulk_annot)
+fibro_samples <- meta_bulk[SMTSD == "Cells - Cultured fibroblasts", SAMPID]
+
+GTEX_bulk <- fread(PATHS$gtex_bulk_counts, skip = 2)
+
+fibro_samples_found   <- intersect(fibro_samples, colnames(GTEX_bulk))
+fibro_samples_missing <- setdiff(fibro_samples,   colnames(GTEX_bulk))
+
+message(sprintf(
+  "GTEx bulk fibroblasts — found: %d  missing: %d",
+  length(fibro_samples_found), length(fibro_samples_missing)
+))
+
+gene_names      <- GTEX_bulk$Description
+GTEX_bulk_fibro <- as.matrix(GTEX_bulk[, fibro_samples_found, with = FALSE])
+mode(GTEX_bulk_fibro) <- "numeric"
+rownames(GTEX_bulk_fibro) <- gene_names
+
+# Normalise: log(TP10K + 1)
+GTEX_bulk_fibro_log <- log_tp10k_norm(GTEX_bulk_fibro)
+rownames(GTEX_bulk_fibro_log) <- make.unique(rownames(GTEX_bulk_fibro_log))
+
+fibroblasts_gtex <- CreateSeuratObject(GTEX_bulk_fibro_log)
+```
+
+---
+
+## 6. Merge Seurat objects
+
+The three datasets are merged into a single Seurat object. Missing
+`Broad.cell.type` entries (from the cultured fibroblast datasets) are filled
+with descriptive labels.
+
+```{r merge-seurat}
+fibro_gtex_seurat <- merge(GTEX_Seurat_subset, fibroblast_seurat, merge.data = TRUE)
+fibro_gtex_seurat@meta.data %<>%
+  mutate(Broad.cell.type = replace_na(Broad.cell.type, "Fibroblasts_cultured"))
+fibro_gtex_seurat <- JoinLayers(fibro_gtex_seurat, layers = "counts")
+
+fibro_gtex_seurat_fibroblast <- merge(fibro_gtex_seurat, fibroblasts_gtex, merge.data = TRUE)
+fibro_gtex_seurat_fibroblast <- JoinLayers(fibro_gtex_seurat_fibroblast, layers = "counts")
+fibro_gtex_seurat_fibroblast@meta.data %<>%
+  mutate(Broad.cell.type = replace_na(Broad.cell.type, "Fibroblasts_cultured_GTEX"))
+fibro_gtex_seurat_fibroblast <- JoinLayers(fibro_gtex_seurat_fibroblast)
+
+analysis <- factor(fibro_gtex_seurat_fibroblast@meta.data[["Broad.cell.type"]])
+message("Cell type levels: ", paste(levels(analysis), collapse = ", "))
+message("NA cell types: ",    sum(is.na(analysis)))
+```
+
+---
+
+## 7. Cell summary
+
+```{r cell-summary}
+cell_summary <- fibro_gtex_seurat@meta.data %>%
+  filter(Broad.cell.type != "Fibroblasts_cultured") %>%
+  group_by(Broad.cell.type) %>%
+  summarise(
+    n_cells         = n(),
+    median_counts   = median(nCount_RNA,   na.rm = TRUE),
+    median_features = median(nFeature_RNA, na.rm = TRUE)
+  ) %>%
+  arrange(desc(n_cells))
+
+cell_summary
+```
+
+```{r overall-summary}
+overall_summary <- cell_summary %>%
+  summarise(
+    n_celltypes    = n(),
+    mean_n_cells   = mean(n_cells),
+    sd_n_cells     = sd(n_cells),
+    median_n_cells = median(n_cells),
+    min_n_cells    = min(n_cells),
+    max_n_cells    = max(n_cells)
+  )
+
+overall_summary
+```
+
+---
+
+## 8. Load PamDx gene lists
+
+```{r load-pamdx-lists}
+pPs_all  <- read.csv(file.path(PATHS$pamdx_lists_dir, "pPs_all.csv"))
+pPs_QCd  <- read.csv(file.path(PATHS$pamdx_lists_dir, "pPs_QCd.csv"))
+STKs_all <- read.csv(file.path(PATHS$pamdx_lists_dir, "STKs_all.csv"))
+STKs_QCd <- read.csv(file.path(PATHS$pamdx_lists_dir, "STKs_QCd.csv"))
+```
+
+```{r list-overview}
+overview_lists <- list(
+  pPs_all  = pPs_all,
+  pPs_QCd  = pPs_QCd,
+  STKs_all = STKs_all,
+  STKs_QCd = STKs_QCd
+)
+
+imap_dfr(
+  overview_lists,
+  ~ tibble(
+    list_name     = .y,
+    n_rows        = nrow(.x),
+    n_unique_rows = nrow(distinct(.x))
+  )
+)
+```
+
+---
+
+## 9. Heatmap constants
+
+Shared cell-type ordering, display labels, colour palette, and break points
+used by every heatmap.
+
+```{r heatmap-constants}
+CELLTYPE_ORDER <- c(
+  "Fibroblast-Skin",
+  "Fibroblasts-cultured",
+  "Fibroblasts-cultured-GTEX",
+  "Fibroblast",
+  "Myocyte (cardiac)",
+  "Myocyte (cardiac, cytoplasmic)",
+  "Adipocyte",
+  "Endothelial cell (lymphatic)",
+  "Endothelial cell (vascular)",
+  "Immune (DC/macrophage)",
+  "Immune (mast cell)",
+  "Immune (NK cell)",
+  "Immune (T cell)",
+  "Pericyte/SMC",
+  "Schwann cell"
+)
+
+ROW_LABELS <- c(
+  "Fibroblast-Skin"                = "Fibroblast (skin)",
+  "Fibroblasts-cultured"           = "Fibroblasts (cultured)",
+  "Fibroblasts-cultured-GTEX"      = "Fibroblasts (cultured GTEX)",
+  "Fibroblast"                     = "Heart - Fibroblast",
+  "Myocyte (cardiac)"              = "Heart - Myocyte (cardiac)",
+  "Myocyte (cardiac, cytoplasmic)" = "Heart - Myocyte (cardiac, cytoplasmic)",
+  "Adipocyte"                      = "Heart - Adipocyte",
+  "Endothelial cell (lymphatic)"   = "Heart - Endothelial cell (lymphatic)",
+  "Endothelial cell (vascular)"    = "Heart - Endothelial cell (vascular)",
+  "Immune (DC/macrophage)"         = "Heart - Immune (DC/macrophage)",
+  "Immune (mast cell)"             = "Heart - Immune (mast cell)",
+  "Immune (NK cell)"               = "Heart - Immune (NK cell)",
+  "Immune (T cell)"                = "Heart - Immune (T cell)",
+  "Pericyte/SMC"                   = "Heart - Pericyte/SMC",
+  "Schwann cell"                   = "Heart - Schwann cell"
+)
+
+HEAT_COLORS <- colorRampPalette(c("black", "lightblue", "darkblue"))(100)
+
+# Fine resolution near zero (sparse snRNA data), then linear to max_value
+make_breaks <- function(max_value = 3) {
+  c(
+    seq(0,      0.003,     length.out = 50),
+    seq(0.0031, max_value, length.out = 51)
+  )
+}
+```
+
+---
+
+## 10. Core heatmap function
+
+A single function replaces the two near-identical functions from the original
+script. `order_by = "alphabetical"` or `"median"` controls gene ordering;
+`split = TRUE` divides a wide heatmap into two stacked or side-by-side panels.
+
+```{r heatmap-function}
+make_pam_pheatmap <- function(
+    seurat_obj,
+    features,
+    title,
+    group_by     = "Broad.cell.type",
+    assay_name   = "RNA",
+    max_value    = 3,
+    order_by     = c("alphabetical", "median"),
+    decreasing   = TRUE,
+    split        = FALSE,
+    split_layout = c("side_by_side", "stacked"),
+    cellwidth    = 10,
+    cellheight   = 10,
+    fontsize_row = 8,
+    fontsize_col = 8,
+    show_legend  = TRUE
+) {
+  order_by     <- match.arg(order_by)
+  split_layout <- match.arg(split_layout)
+
+  features <- unique(na.omit(features))
+  features <- features[features %in% rownames(seurat_obj)]
+  message(sprintf("[%s] Features found in object: %d", title, length(features)))
+
+
+  avg_expr <- AverageExpression(
+    seurat_obj,
+    features = features,
+    group.by = group_by,
+    slot     = "counts"
+  )
+
+  mat <- as.matrix(avg_expr[[assay_name]])
+  mat <- mat[features, , drop = FALSE]
+
+  col_order <- CELLTYPE_ORDER[CELLTYPE_ORDER %in% colnames(mat)]
+  mat       <- mat[, col_order, drop = FALSE]
+
+  mat_t <- t(mat)
+  storage.mode(mat_t) <- "numeric"
+  mat_t[!is.finite(mat_t)] <- 0
+  mat_t[mat_t < 0]         <- 0
+  mat_t[mat_t > max_value] <- max_value
+
+  if (order_by == "alphabetical") {
+    mat_t <- mat_t[, sort(colnames(mat_t)), drop = FALSE]
+  } else {
+    med_score <- apply(mat_t, 2, median, na.rm = TRUE)
+    mat_t     <- mat_t[, names(sort(med_score, decreasing = decreasing)), drop = FALSE]
+  }
+
+  breaks     <- make_breaks(max_value)
+  labels_row <- ROW_LABELS[rownames(mat_t)]
+
+  # ── Single panel ────────────────────────────────────────────────────────────
+  if (!split) {
+    p <- pheatmap::pheatmap(
+      mat_t,
+      color         = HEAT_COLORS,
+      breaks        = breaks,
+      cluster_rows  = FALSE,
+      cluster_cols  = FALSE,
+      show_rownames = TRUE,
+      show_colnames = TRUE,
+      labels_row    = labels_row,
+      angle_col     = "90",
+      cellwidth     = cellwidth,
+      cellheight    = cellheight,
+      fontsize_row  = fontsize_row,
+      fontsize_col  = fontsize_col,
+      fontsize      = 9,
+      main          = title,
+      border_color  = "grey90",
+      legend        = show_legend,
+      silent        = TRUE
+    )
+    grid::grid.draw(p$gtable)
+    return(p)
+  }
+
+  # ── Split panel ─────────────────────────────────────────────────────────────
+  mid     <- ceiling(ncol(mat_t) / 2)
+  mat_t_1 <- mat_t[, 1:mid,                  drop = FALSE]
+  mat_t_2 <- mat_t[, (mid + 1):ncol(mat_t),  drop = FALSE]
+
+  make_panel <- function(m, suffix, legend) {
+    pheatmap::pheatmap(
+      m,
+      color         = HEAT_COLORS,
+      breaks        = breaks,
+      cluster_rows  = FALSE,
+      cluster_cols  = FALSE,
+      show_rownames = TRUE,
+      show_colnames = TRUE,
+      labels_row    = ROW_LABELS[rownames(m)],
+      angle_col     = "90",
+      cellwidth     = cellwidth,
+      cellheight    = cellheight,
+      fontsize_row  = fontsize_row,
+      fontsize_col  = fontsize_col,
+      fontsize      = 9,
+      main          = paste0(title, suffix),
+      border_color  = "grey90",
+      legend        = legend,
+      silent        = TRUE
+    )
+  }
+
+  p1 <- make_panel(mat_t_1, " (part 1)", show_legend)
+  p2 <- make_panel(mat_t_2, " (part 2)", FALSE)
+
+  ncols    <- if (split_layout == "side_by_side") 2L else 1L
+  arranged <- gridExtra::arrangeGrob(p1$gtable, p2$gtable, ncol = ncols)
+  grid::grid.draw(arranged)
+  return(arranged)
+}
+```
+
+---
+
+## 11. Generate heatmaps
+
+### 11a. Alphabetical gene ordering
+
+```{r heatmap-pps-all-alpha, fig.cap="pPs-related genes, all tested — alphabetical"}
+pPs_all_alphabetical <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = pPs_all$HGNC_genename,
+  title      = "pPs-related genes, all tested — alphabetical",
+  order_by   = "alphabetical"
+)
+```
+
+```{r heatmap-pps-qcd-alpha, fig.cap="pPs-related genes, passed QC — alphabetical"}
+pPs_QCd_alphabetical <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = pPs_QCd$HGNC.symbol,
+  title      = "pPs-related genes, passed QC — alphabetical",
+  order_by   = "alphabetical"
+)
+```
+
+```{r heatmap-stks-all-alpha, fig.cap="inferred STKs (kinases), all tested — alphabetical"}
+STKs_all_alphabetical <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = STKs_all$HGNC_genename,
+  title      = "inferred STKs (kinases), all tested — alphabetical",
+  order_by   = "alphabetical"
+)
+```
+
+```{r heatmap-stks-qcd-alpha, fig.cap="inferred STKs (kinases), QCd — alphabetical"}
+STKs_QCd_alphabetical <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = STKs_QCd$HGNC_genename,
+  title      = "inferred STKs (kinases), QCd — alphabetical",
+  order_by   = "alphabetical"
+)
+```
+
+### 11b. Sorted by median expression
+
+```{r heatmap-pps-all-median, fig.cap="pPs-related genes, all tested — sorted by median expression"}
+pPs_all_median_sorted <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = pPs_all$HGNC_genename,
+  title      = "pPs-related genes, all tested — sorted by median expression",
+  order_by   = "median",
+  decreasing = TRUE
+)
+```
+
+```{r heatmap-pps-qcd-median, fig.cap="pPs-related genes, passed QC — sorted by median expression"}
+pPs_QCd_median_sorted <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = pPs_QCd$HGNC.symbol,
+  title      = "pPs-related genes, passed QC — sorted by median expression",
+  order_by   = "median",
+  decreasing = TRUE
+)
+```
+
+```{r heatmap-stks-all-median, fig.cap="inferred STKs (kinases), all tested — sorted by median expression"}
+STKs_all_median_sorted <- make_pam_pheatmap(
+  seurat_obj = fibro_gtex_seurat_fibroblast,
+  features   = STKs_all$HGNC_genename,
+  title      = "inferred STKs (kinases), all tested — sorted by median expression",
+  order_by   = "median",
+  decreasing = TRUE
+)
+```
+
+```{r heatmap-stks-qcd-median, fig.cap="inferred STKs (kinases), passed QC — sorted by median expression (split)"}
+STKs_QCd_median_sorted <- make_pam_pheatmap(
+  seurat_obj   = fibro_gtex_seurat_fibroblast,
+  features     = STKs_QCd$HGNC_genename,
+  title        = "inferred STKs (kinases), passed QC — sorted by median expression",
+  order_by     = "median",
+  decreasing   = TRUE,
+  split        = TRUE,
+  split_layout = "stacked"
+)
+```
+
+---
+
+## 12. Export PDFs
+
+```{r export-pdf, results="hide"}
+all_plots <- list(
+  pPs_all_alphabetical,
+  pPs_QCd_alphabetical,
+  STKs_all_alphabetical,
+  STKs_QCd_alphabetical,
+  pPs_all_median_sorted,
+  pPs_QCd_median_sorted,
+  STKs_all_median_sorted,
+  STKs_QCd_median_sorted
+)
+
+draw_plot <- function(p) {
+  grid::grid.newpage()
+  if ("gtable" %in% names(p)) grid::grid.draw(p$gtable) else grid::grid.draw(p)
+}
+
+# All heatmaps
+pdf(PATHS$output_pdf_all, width = 22, height = 8)
+invisible(lapply(all_plots, draw_plot))
+dev.off()
+
+# Article subset (QCd only)
+# If this fails with 'unable to start device', run dev.off() until
+# you see 'null device', then re-run this chunk.
+grDevices::cairo_pdf(
+  PATHS$output_pdf_art,
+  width  = 22,
+  height = 8,
+  family = "Helvetica"
+)
+draw_plot(pPs_QCd_median_sorted)
+draw_plot(STKs_QCd_median_sorted)
+dev.off()
+
+message("PDFs written to:\n  ", PATHS$output_pdf_all, "\n  ", PATHS$output_pdf_art)
+```
+
+---
+
+## 13. Session info
+
+```{r session-info}
+sessionInfo()
+```
