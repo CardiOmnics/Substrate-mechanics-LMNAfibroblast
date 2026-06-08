@@ -27,3 +27,6 @@ Source: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE262112
 * `GSM8157770`
 
 
+## Credits
+
+This script was written by [Elibrouwer](https://github.com/elibrouwer) and is included here with permission. 
