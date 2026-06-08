@@ -1,6 +1,6 @@
 # Input files required for `pPs_analysis_script.R`
 
-## Explanation
+## Dependencies
 ```r
 library(dplyr)    
 library(pheatmap) 
