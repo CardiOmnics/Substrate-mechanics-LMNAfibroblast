@@ -20,7 +20,7 @@ Cells convert physical cues into biochemical signals via mechanosensitive pathwa
 ## Analysis Overview
 
 ### `pPs_analysis_script.R`
-
+[`pPs_analysis_script.R`](/scripts/pPs_analysis_script.R/)
 This script performs the following steps:
 
 1. **Data loading & merging** — Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥90% of samples.
