@@ -21,6 +21,7 @@ Cells convert physical cues into biochemical signals via mechanosensitive pathwa
 
 ### `pPs_analysis_script.R`
 [`pPs_analysis_script.R`](/scripts/pPs_analysis_script.R/)
+
 This script performs the following steps:
 
 1. **Data loading & merging** — Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥90% of samples.
@@ -34,6 +35,7 @@ This script performs the following steps:
 4. **Dot plots** — Visualises individual pPs expression per condition with t-tests (Bonferroni-corrected). pPs are ranked by significance; the top 25 most significant are plotted by default.
 
 ### `UKA_heatmap_scripts.R`
+[`UKA_heatmap_scripts.R`](/scripts/UKA_heatmap_scripts.R/)
 
 This script performs the following steps:
 
@@ -41,6 +43,7 @@ This script performs the following steps:
 2. **Genotype comparison** — Loads UKA output CSVs comparing hfLMNA<sup>R377L/WT</sup> vs hfLMNA<sup>WT/WT</sup> per substrate condition (Rigid-unstrained, Soft-unstrained, Soft-strained) and generates a corresponding kinase activity heatmap.
 
 ### `PamDx_GTExanalysis.Rmd`
+[`PamDx_GTExanalysis.Rmd`](/scripts/PamDx_GTExanalysis.Rmd/)
 
 This script visualizes pPs expression in different celltype, based on publicly available RNAseq datasets
 
