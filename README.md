@@ -20,7 +20,7 @@ Cells convert physical cues into biochemical signals via mechanosensitive pathwa
 ## Analysis Overview
 
 ### `pPs_analysis_script.R`
-[`pPs_analysis_script.R`](/scripts/pPs_analysis_script.R/)
+### [`pPs_analysis_script.R`](/scripts/pPs_analysis_script.R/)
 
 This script performs the following steps:
 
