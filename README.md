@@ -37,7 +37,7 @@ This script performs the following steps:
 
 This script performs the following steps:
 
-1. **Substrate mechanics comparison** — Loads UKA output CSVs comparing Hard vs Soft and Stretch vs Soft conditions, filters by contrast group, and generates a heatmap of mean kinase statistic scores (thresholded by median final score < 1.3) across substrate mechanics conditions for both genotypes.
+1. **Substrate mechanics comparison** — Loads UKA output CSVs comparing Hard vs Soft and Stretch vs Soft conditions, filters by contrast group, and generates a heatmap of mean kinase statistic scores (thresholded by median final score > 1.2) across substrate mechanics conditions for both genotypes.
 2. **Genotype comparison** — Loads UKA output CSVs comparing hfLMNA<sup>R377L/WT</sup> vs hfLMNA<sup>WT/WT</sup> per substrate condition (Rigid-unstrained, Soft-unstrained, Soft-strained) and generates a corresponding kinase activity heatmap.
 
 ### [`PamDx_GTExanalysis.Rmd`](/scripts/PamDx_GTExanalysis.Rmd/)
