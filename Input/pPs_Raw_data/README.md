@@ -1,14 +1,5 @@
 # Input files required for `pPs_analysis_script.R`
 
-## Dependencies
-```r
-library(dplyr)    
-library(pheatmap) 
-library(readxl)   
-library(ggplot2)  
-library(readr)
-```   
-
 ## Metadata notes
 | Label | Description | Name in raw-data |
 |---|---|---|
