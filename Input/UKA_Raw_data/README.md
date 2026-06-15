@@ -1,17 +1,6 @@
 # Input required for `UKA_heatmap_scripts.R`
 
 
-## Dependencies
-
-```r
-library(dplyr)    
-library(pheatmap) 
-library(readxl)   
-library(ggplot2)  
-library(readr)    
-```
----
-
 ## Metadata notes
 
 The labels are simplified/shortened in the raw-data files to improve simplicity. Please use this table as guideline through the experimental groups.
