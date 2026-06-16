@@ -110,7 +110,7 @@ Required raw data files are located in the [`/Input/pPs_Raw_data/`](/Input/pPs_R
 - `4_UKA_LMNA vs WT run3-4.csv`
 Required raw data files are located in the [`/Input/UKA_Raw_data/`](/Input/UKA_Raw_data/) directory.
 
-##`PamDx_GTExanalysis.Rmd`
+**`PamDx_GTExanalysis.Rmd`**
 - `GTEx_8_genes.csv`
 Required raw data files are located in the [`/Input/GTEx_analysis/`](/Input/GTEx_analysis/) directory.
 ---
