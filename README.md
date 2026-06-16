@@ -101,6 +101,7 @@ The scripts expect the following files (update paths in the scripts to match you
 - `Raw data_Run3-4_Updated.xls`
 - `Raw data_Run5-6_LMNA_Updated.xls`
 - `Raw data_Run5-6_WT_Updated.xls`
+
 Required raw data files are located in the [`/Input/pPs_Raw_data/`](/Input/pPs_Raw_data/) directory.
 
 **`UKA_heatmap_scripts.R`**
@@ -108,10 +109,12 @@ Required raw data files are located in the [`/Input/pPs_Raw_data/`](/Input/pPs_R
 - `2_UKA_ LMNA vs WT run1-2.csv`
 - `3_UKA_Stretch vs Soft Run3-4.csv`
 - `4_UKA_LMNA vs WT run3-4.csv`
+
 Required raw data files are located in the [`/Input/UKA_Raw_data/`](/Input/UKA_Raw_data/) directory.
 
 **`PamDx_GTExanalysis.Rmd`**
 - `GTEx_8_genes.csv`
+
 Required raw data files are located in the [`/Input/GTEx_analysis/`](/Input/GTEx_analysis/) directory.
 ---
 
