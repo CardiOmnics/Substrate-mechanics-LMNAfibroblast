@@ -29,11 +29,9 @@ Required raw data files are located in the [`../Input/pPs_Raw_data/`](../Input/p
 ### `UKA_heatmap.R`
 
 ```r
-library(dplyr)    
-library(pheatmap) 
-library(readxl)   
-library(ggplot2)  
-library(readr)    
+library(dplyr)
+library(readr)
+library(pheatmap)
 ```
 Required raw data files are located in the [`../Input/UKA_Raw_data/`](../Input/UKA_Raw_data/) directory.
 ### `PamDx_GTExanalysis.Rmd`
