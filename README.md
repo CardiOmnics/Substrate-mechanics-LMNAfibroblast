@@ -23,15 +23,16 @@ Cells convert physical cues into biochemical signals via mechanosensitive pathwa
 
 This script performs the following steps:
 
-1. **Data loading & merging** — Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥90% of samples.
-2. **Heatmap** — Generates a z-score-scaled hierarchical clustering heatmap using `ComplexHeatmap`, annotated by substrate mechanics, genotype, and run ID.
-3. **PCA** — Performs principal component analysis on the phosphopeptide matrix (missing values imputed with column means). Produces plots for:
+1. **Data loading & merging** - Loads raw kinome array data from four Excel files (Runs 1–2, 3–4, and 5–6 for LMNA and WT) and merges them into a single matrix, retaining phosphopeptides present in ≥90% of samples.
+2. **Heatmap** - Generates a z-score-scaled hierarchical clustering heatmap using `ComplexHeatmap`, annotated by substrate mechanics, genotype, and run ID.
+3. **PCA** - Performs principal component analysis on the phosphopeptide matrix (missing values imputed with column means). Produces plots for:
    - Overall genotype separation (_PC1 vs PC2_)
    - Substrate mechanics separation (_PC1 vs PC2_)
    - Batch effects (_PC2 vs PC3_)
    - Variance explained bar chart (top 10 PCs)
    - Per-substrate genotype comparisons (Rigid-unstrained, Soft-unstrained, Soft-strained)
-4. **Dot plots** — Visualises individual pPs expression per condition with t-tests (Bonferroni-corrected). pPs are ranked by significance; the top 25 most significant are plotted by default.
+4. **Dot plots** - Visualises individual pPs expression per condition with t-tests (Bonferroni-corrected). pPs are ranked by significance; the top 25 most significant are plotted by default.
+5. **LMM** - Calculation and visualisation of linear mixed-effect model
 
 ### [`UKA_heatmap_scripts.R`](/scripts/UKA_heatmap_scripts.R/)
 
