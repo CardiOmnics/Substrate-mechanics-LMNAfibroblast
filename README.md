@@ -46,52 +46,6 @@ This script visualizes pPs expression in different celltype, based on publicly a
 
 ---
 
-## Dependencies
-
-### `pPs_analysis_script.R`
-
-```r
-library(readxl)        
-library(dplyr)          
-library(tidyr)         
-library(tibble)         
-library(purrr)          
-library(ggplot2)        
-library(ggpubr)         
-library(ComplexHeatmap) 
-library(circlize)       
-library(patchwork)      
-```
-
-### `UKA_heatmap_scripts.R`
-
-```r
-library(dplyr)    
-library(pheatmap) 
-library(readxl)   
-library(ggplot2)  
-library(readr)    
-```
-
-### `PamDx_GTExanalysis.Rmd`
-
-```r
-library(Seurat)
-library(BPCells)
-library(dplyr)
-library(tidyr)
-library(magrittr)
-library(stringr)
-library(purrr)
-library(tibble)
-library(pheatmap)
-library(grid)
-library(data.table)
-library(gridExtra)
-```
-
----
-
 ## Input Data
 
 The scripts expect the following files (update paths in the scripts to match your local directory):
