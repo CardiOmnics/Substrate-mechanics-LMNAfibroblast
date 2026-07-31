@@ -1,7 +1,7 @@
 
 ## Dependencies
 
-### `pPs_analysis_script.R`
+### `pPs_analysis.R`
 
 ```r
 library(readxl)
@@ -11,15 +11,22 @@ library(tibble)
 library(purrr)
 library(ggplot2)
 library(ggpubr)
+library(ggsignif)
 library(ComplexHeatmap)
 library(circlize)
 library(patchwork)
+library(car)
+library(vegan)
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(performance)
 ```
 Required raw data files are located in the [`../Input/pPs_Raw_data/`](../Input/pPs_Raw_data/) directory.
 
 
 
-### `UKA_heatmap_scripts.R`
+### `UKA_heatmap.R`
 
 ```r
 library(dplyr)    
