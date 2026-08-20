@@ -31,7 +31,7 @@ This script performs the following steps:
    - Batch effects (_PC2 vs PC3_)
    - Variance explained bar chart (top 10 PCs)
    - Per-substrate genotype comparisons (Rigid-unstrained, Soft-unstrained, Soft-strained)
-4. **Dot plots** - Visualises individual pPs expression per condition with t-tests (Bonferroni-corrected). pPs are ranked by significance; the top 25 most significant are plotted by default.
+4. **Dot plots** - Visualises individual pPs expression per condition with t-tests (BH-corrected). pPs are ranked by significance; the top 25 most significant are plotted by default.
 5. **LMM** - Calculation and visualisation of linear mixed-effect model
 
 ### [`UKA_heatmap_scripts.R`](/scripts/UKA_heatmap_scripts.R/)
@@ -83,7 +83,7 @@ The labels are simplified/shortened in the raw-data files to improve simplicity.
 | hfLMNA<sup>R377L/WT</sup> | Cardiolaminopathic human fibroblasts (*LMNA* R377L variant) | LMNA |
 | Rigid-unstrained | Conventional rigid substrate (plastic), no mechanical stimulation | Hard |
 | Soft-unstrained | Soft substrate, no mechanical stimulation | Soft |
-| Soft-strained | Soft substrate with cyclic stretch applied (2.5D) | Stretch |
+| Soft-strained | Soft substrate with cyclic stretch applied | Stretch |
 
 ---
 ## Credits
